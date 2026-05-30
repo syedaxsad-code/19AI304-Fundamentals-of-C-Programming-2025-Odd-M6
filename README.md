@@ -33,7 +33,33 @@ To develop a C program using the static storage class in a function with a param
 ### Step 8:
   Stop
 # Program:
+```
+#include <stdio.h>
+void display(int n);
+int main()
+{
+    int input;
+    int i;
+    printf("Enter the input value: ");
+    scanf("%d", &input);
+    for (i = 0; i < 5; i++)
+    {
+        display(input);
+    }
+    return 0;
+}
+void display(int n)
+{
+    static float base = 100.25;
+    float result;
+    result = base + n;
+    printf("%.2f  ", result);
+    base = base + 100.25;
+}
+```
 # Output:
+<img width="1906" height="653" alt="image" src="https://github.com/user-attachments/assets/ebee995d-985b-4b9b-8efa-dde690d48ec6" />
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -79,7 +105,72 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 11:
   Stop
 # Program:
+```
+#include <stdio.h>
+int add(int a, int b);
+int subtract(int a, int b);
+int multiply(int a, int b);
+int divide(int a, int b);
+int main()
+{
+    int num1, num2, choice, result;
+    int (*operation)(int, int);
+    printf("Enter two integers: ");
+    scanf("%d %d", &num1, &num2);
+    printf("\nMenu:\n");
+    printf("1. Add\n");
+    printf("2. Subtract\n");
+    printf("3. Multiply\n");
+    printf("4. Divide\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    switch (choice)
+    {
+        case 1:
+            operation = add;
+            break;
+        case 2:
+            operation = subtract;
+            break;
+        case 3:
+            operation = multiply;
+            break;
+        case 4:
+            if (num2 == 0)
+            {
+                printf("Error: Division by zero is not allowed");
+                return 0;
+            }
+            operation = divide;
+            break;
+        default:
+            printf("Invalid choice");
+            return 0;
+    }
+    result = operation(num1, num2);
+    printf("Result = %d", result);
+    return 0;
+}
+int add(int a, int b)
+{
+    return a + b;
+}
+int subtract(int a, int b)
+{
+    return a - b;
+}
+int multiply(int a, int b)
+{
+    return a * b;
+}
+int divide(int a, int b)
+{
+    return a / b;
+}
+```
 # Output:
+<img width="1900" height="791" alt="image" src="https://github.com/user-attachments/assets/412d5f4c-feaf-491c-ae4c-4ec960f1adb8" />
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -123,7 +214,57 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 10:
   Stop
 # Program:
+```
+#include <stdio.h>
+struct employee
+{
+    int eno;
+    char ename[50];
+    float salary;
+};
+int main()
+{
+    struct employee e[50];
+    int n, i;
+    float high;
+    printf("Enter number of employees: ");
+    scanf("%d", &n);
+    for (i = 0; i < n; i++)
+    {
+        printf("\nEnter details of employee %d\n", i + 1);
+        printf("Employee Number: ");
+        scanf("%d", &e[i].eno);
+        printf("Employee Name: ");
+        scanf(" %[^\n]", e[i].ename);
+        printf("Employee Salary: ");
+        scanf("%f", &e[i].salary);
+    }
+    high = e[0].salary;
+    for (i = 1; i < n; i++)
+    {
+        if (e[i].salary > high)
+        {
+            high = e[i].salary;
+        }
+    }
+    printf("\nEmployee(s) with Highest Salary:\n");
+    printf("Highest Salary = %.2f\n", high);
+    for (i = 0; i < n; i++)
+    {
+        if (e[i].salary == high)
+        {
+            printf("\nEmployee Number: %d", e[i].eno);
+            printf("\nEmployee Name  : %s", e[i].ename);
+            printf("\nEmployee Salary: %.2f\n", e[i].salary);
+        }
+    }
+    return 0;
+}
+
+```
 # Output:
+<img width="1915" height="783" alt="image" src="https://github.com/user-attachments/assets/ffd608ee-4619-4996-91f0-f0d2b4225df5" />
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -166,7 +307,52 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 9:
   Stop
 # Program:
+```
+#include <stdio.h>
+struct date
+{
+    int c_date, c_month, c_year;
+    int b_date, b_month, b_year;
+    int cal_date, cal_month, cal_year;
+};
+void findAge(struct date *d);
+int main()
+{
+    struct date d;
+    printf("Enter current date (DD MM YYYY): ");
+    scanf("%d %d %d", &d.c_date, &d.c_month, &d.c_year);
+    printf("Enter birth date (DD MM YYYY): ");
+    scanf("%d %d %d", &d.b_date, &d.b_month, &d.b_year);
+    findAge(&d);
+    printf("\nPresent Age:\n");
+    printf("Years  : %d\n", d.cal_year);
+    printf("Months : %d\n", d.cal_month);
+    printf("Days   : %d\n", d.cal_date);
+    return 0;
+}
+void findAge(struct date *d)
+{
+    int month[] = { 31, 28, 31, 30, 31, 30,
+                    31, 31, 30, 31, 30, 31 };
+    if (d->b_date > d->c_date)
+    {
+        d->c_month--;
+        d->c_date += month[d->c_month - 1];
+    }
+    if (d->b_month > d->c_month)
+    {
+        d->c_year--;
+        d->c_month += 12;
+    }
+    d->cal_date  = d->c_date  - d->b_date;
+    d->cal_month = d->c_month - d->b_month;
+    d->cal_year  = d->c_year  - d->b_year;
+}
+
+```
 # Output:
+<img width="1863" height="787" alt="image" src="https://github.com/user-attachments/assets/fa10005b-67f5-4008-a4d3-3b1543f16d67" />
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
@@ -202,7 +388,28 @@ Thus, the program was implemented and executed successfully, and the required ou
 ### Step 10:
   Stop
 # Program:
+```
+  #include <stdio.h>
+union abc
+{
+    int a;
+    char b;
+};
+int main()
+{
+    union abc var;
+    union abc *ptr;
+    ptr = &var;
+    var.a = 89;
+    printf("Value as integer: %d\n", ptr->a);
+    printf("Value as character: %c\n", ptr->b);
+    return 0;
+}
+
+```
 # Output:
+<img width="1915" height="532" alt="image" src="https://github.com/user-attachments/assets/c1728958-d142-446e-8d21-133c5a74d5d7" />
+
 # Result: 
 Thus, the program was implemented and executed successfully, and the required output was obtained.
 
